@@ -1,0 +1,10 @@
+3000 Julia
+2002 Tiago
+1000 Rafael
+800 Joao
+700 Lara
+600 Maria
+200 Lucas
+100 Julio
+50 Andre
+0 Vanessa
