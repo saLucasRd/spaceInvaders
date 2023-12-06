@@ -106,7 +106,7 @@ public class Jogo extends JFrame {
 
 	// Elementos do jogo
 
-	private int vidas = 5;
+	private int vidas = 1;
 
 	// Desenharemos mais dois tanques na base da tela
 	private Elemento vida = new Tanque();
@@ -301,7 +301,9 @@ public class Jogo extends JFrame {
 						Invader inv = invasores[i][j];
 
 						if (!inv.isAtivo()) {
+
 							continue;
+
 						}
 
 						if (Util.colide(tiroTanque, inv)) {
@@ -317,6 +319,7 @@ public class Jogo extends JFrame {
 						if (moverInimigos) {
 
 							inv.atualiza();
+
 
 							if (novaLinha) {
 								inv.setPy(inv.getPy() + inv.getAltura() + espacamento);
@@ -412,6 +415,7 @@ public class Jogo extends JFrame {
 						} else if (Util.colide(tiros[i], barreira)) {
 							vidasBarreira1--;
 							player.play("sons/barrier.wav");
+
 							if (vidasBarreira1 == 0) {
 								player.play("sons/explosion.wav");
 								barreira.setAtivo(false);
@@ -495,7 +499,7 @@ public class Jogo extends JFrame {
 				if (vidas == 0 || totalInimigos == 0) {
 					System.out.println("game over");
 					nomeJogador();
-					Scoreboard.showScore();
+					//new Scoreboard();
 					System.out.println(pontos);
 					break;
 				}
@@ -517,9 +521,8 @@ public class Jogo extends JFrame {
 
 	public static void main(String[] args) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 		Jogo jogo = new Jogo();
-
-		//Jogador jogador = new Jogador();
 		Scoreboard score = new Scoreboard();
+		//Jogador jogador = new Jogador();
 		jogo.carregarJogo();
 		jogo.iniciarJogo();
 
