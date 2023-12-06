@@ -411,7 +411,9 @@ public class Jogo extends JFrame {
 
 						} else if (Util.colide(tiros[i], barreira)) {
 							vidasBarreira1--;
+							player.play("sons/barrier.wav");
 							if (vidasBarreira1 == 0) {
+								player.play("sons/explosion.wav");
 								barreira.setAtivo(false);
 								barreira.setPx(-100);
 							}
@@ -420,8 +422,10 @@ public class Jogo extends JFrame {
 
 
 						} else if (Util.colide(tiros[i], barreira2)) {
+							player.play("sons/barrier.wav");
 							vidasBarreira2--;
 							if (vidasBarreira2 == 0) {
+								player.play("sons/explosion.wav");
 								barreira2.setAtivo(false);
 								barreira2.setPx(-100);
 							}
@@ -429,7 +433,9 @@ public class Jogo extends JFrame {
 
 						} else if (Util.colide(tiros[i], barreira3)) {
 							vidasBarreira3--;
+							player.play("sons/barrier.wav");
 							if (vidasBarreira3 == 0) {
+								player.play("sons/explosion.wav");
 								barreira3.setAtivo(false);
 								barreira3.setPx(-100);
 							}
