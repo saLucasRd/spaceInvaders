@@ -97,10 +97,16 @@ public class Jogo extends JFrame {
 
 	// Elementos do jogo
 
-	private int vidas = 1;
+	private int vidas = 5;
 
 	// Desenharemos mais dois tanques na base da tela
 	private Elemento vida = new Tanque();
+
+
+	private int vidasBarreira1 = 3;
+	private int vidasBarreira2 = 3;
+	private int vidasBarreira3 = 3;
+
 
 	private Elemento tiroTanque;
 
@@ -113,6 +119,9 @@ public class Jogo extends JFrame {
 	private Invader chefe;
 
 	private Elemento tanque;
+	private Elemento barreira;
+	private Elemento barreira2;
+	private Elemento barreira3;
 
 	private Invader[][] invasores = new Invader[11][5];
 
@@ -155,6 +164,24 @@ public class Jogo extends JFrame {
 		tanque.setAtivo(true);
 		tanque.setPx(tela.getWidth() / 2 - tanque.getLargura() / 2);
 		tanque.setPy(tela.getHeight() - tanque.getAltura() - linhaBase);
+
+
+		// barreiras desenhadas
+		barreira = new Barreira();
+		barreira.setAtivo(true);
+		barreira.setPx(130);
+		barreira.setPy(tela.getHeight() - barreira.getAltura() - linhaBase - 40 );
+
+		barreira2 = new Barreira();
+		barreira2.setAtivo(true);
+		barreira2.setPx(230);
+		barreira2.setPy(tela.getHeight() - barreira2.getAltura() - linhaBase - 40 );
+
+		barreira3 = new Barreira();
+		barreira3.setAtivo(true);
+		barreira3.setPx(330);
+		barreira3.setPy(tela.getHeight() - barreira3.getAltura() - linhaBase - 40 );
+
 
 		tiroTanque = new Tiro();
 		tiroTanque.setVel(-15);
@@ -349,10 +376,12 @@ public class Jogo extends JFrame {
 						vidas--;
 						tiroChefe.setAtivo(false);
 
-					} else if (tiroChefe.getPy() > tela.getHeight() - linhaBase - tiroChefe.getAltura()) {
+						} else if (tiroChefe.getPy() > tela.getHeight() - linhaBase - tiroChefe.getAltura()) {
 						tiroChefe.setAtivo(false);
 					} else
 						tiroChefe.desenha(g2d);
+
+
 
 				}
 
@@ -363,6 +392,33 @@ public class Jogo extends JFrame {
 						if (Util.colide(tiros[i], tanque)) {
 							vidas--;
 							tiros[i].setAtivo(false);
+
+						} else if (Util.colide(tiros[i], barreira)) {
+							vidasBarreira1--;
+							if (vidasBarreira1 == 0) {
+								barreira.setAtivo(false);
+								barreira.setPx(-100);
+							}
+							tiros[i].setAtivo(false);
+
+
+
+						} else if (Util.colide(tiros[i], barreira2)) {
+							vidasBarreira2--;
+							if (vidasBarreira2 == 0) {
+								barreira2.setAtivo(false);
+								barreira2.setPx(-100);
+							}
+							tiros[i].setAtivo(false);
+
+						} else if (Util.colide(tiros[i], barreira3)) {
+							vidasBarreira3--;
+							if (vidasBarreira3 == 0) {
+								barreira3.setAtivo(false);
+								barreira3.setPx(-100);
+							}
+							tiros[i].setAtivo(false);
+
 
 						} else if (tiros[i].getPy() > tela.getHeight() - linhaBase - tiros[i].getAltura())
 							tiros[i].setAtivo(false);
@@ -382,13 +438,23 @@ public class Jogo extends JFrame {
 				tanque.atualiza();
 				tanque.desenha(g2d);
 
+				barreira.atualiza();
+				barreira.desenha(g2d);
+
+				barreira2.atualiza();
+				barreira2.desenha(g2d);
+
+				barreira3.atualiza();
+				barreira3.atualiza();
+				barreira3.desenha(g2d);
+
 				chefe.atualiza();
 				chefe.desenha(g2d);
 
 				g2d.setColor(Color.WHITE);
 
 				texto.desenha(g2d, String.valueOf(pontos), 10, 20);
-				texto.desenha(g2d, "Level " + level, tela.getWidth() - 100, 20);
+				//texto.desenha(g2d, "Level " + level, tela.getWidth() - 100, 20);
 				texto.desenha(g2d, String.valueOf(vidas), 10, tela.getHeight() - 10);
 
 				// Linha base
@@ -406,7 +472,7 @@ public class Jogo extends JFrame {
 				// para ao loop do jogo
 				if (vidas == 0 || totalInimigos == 0) {
 					System.out.println("game over");
-					Jogador.setNome(nomeJogador());
+					nomeJogador();
 					Scoreboard.showScore();
 					System.out.println(pontos);
 					break;
@@ -429,7 +495,7 @@ public class Jogo extends JFrame {
 
 	public static void main(String[] args) {
 		Jogo jogo = new Jogo();
-		Jogador jogador = new Jogador();
+		//Jogador jogador = new Jogador();
 		Scoreboard score = new Scoreboard();
 		jogo.carregarJogo();
 		jogo.iniciarJogo();
