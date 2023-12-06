@@ -6,13 +6,20 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
+import javax.sound.sampled.*;
+import java.io.File;
 
 import br.com.mvbos.lgj.Invader.Tipos;
 import br.com.mvbos.lgj.base.Elemento;
 import br.com.mvbos.lgj.base.Texto;
+import br.com.mvbos.lgj.base.TocarSom;
 import br.com.mvbos.lgj.base.Util;
 
 public class Jogo extends JFrame {
@@ -34,7 +41,8 @@ public class Jogo extends JFrame {
 
 	private boolean[] controleTecla = new boolean[5];
 
-	public Jogo() {
+	public Jogo() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+
 		this.addKeyListener(new KeyListener() {
 
 			@Override
@@ -75,6 +83,7 @@ public class Jogo extends JFrame {
 	}
 
 
+
 	private void setaTecla(int tecla, boolean pressionada) {
 		switch (tecla) {
 		case KeyEvent.VK_UP:
@@ -103,9 +112,9 @@ public class Jogo extends JFrame {
 	private Elemento vida = new Tanque();
 
 
-	private int vidasBarreira1 = 3;
-	private int vidasBarreira2 = 3;
-	private int vidasBarreira3 = 3;
+	private int vidasBarreira1 = 7;
+	private int vidasBarreira2 = 7;
+	private int vidasBarreira3 = 7;
 
 
 	private Elemento tiroTanque;
@@ -224,6 +233,7 @@ public class Jogo extends JFrame {
 	}
 
 	public void iniciarJogo() {
+		TocarSom player = new TocarSom();
 		long prxAtualizacao = 0;
 
 		while (true) {
@@ -263,13 +273,16 @@ public class Jogo extends JFrame {
 					tiroTanque.setPx(tanque.getPx() + tanque.getLargura() / 2 - tiroTanque.getLargura() / 2);
 					tiroTanque.setPy(tanque.getPy() - tiroTanque.getAltura());
 					tiroTanque.setAtivo(true);
+					player.play("sons/shoot.wav");
 				}
 
 				if (chefe.isAtivo()) {
+
 					chefe.incPx(tanque.getVel() - 1);
 
 					if (!tiroChefe.isAtivo() && Util.colideX(chefe, tanque)) {
 						addTiroInimigo(chefe, tiroChefe);
+						player.play("sons/ufo_lowpitch.wav");
 					}
 
 					if (chefe.getPx() > tela.getWidth()) {
@@ -294,7 +307,7 @@ public class Jogo extends JFrame {
 						if (Util.colide(tiroTanque, inv)) {
 							inv.setAtivo(false);
 							tiroTanque.setAtivo(false);
-
+							player.play("sons/invaderkilled.wav");
 							destruidos++;
 							pontos = pontos + inv.getPremio() * level;
 
@@ -320,6 +333,7 @@ public class Jogo extends JFrame {
 							}
 
 							if (!tiros[0].isAtivo() && inv.getPx() < tanque.getPx()) {
+								player.play("sons/invadershoot.wav");
 								addTiroInimigo(inv, tiros[0]);
 
 							} else if (!tiros[1].isAtivo() && inv.getPx() > tanque.getPx() && inv.getPx() < tanque.getPx() + tanque.getLargura()) {
@@ -373,6 +387,7 @@ public class Jogo extends JFrame {
 					tiroChefe.incPy(tiroChefe.getVel());
 
 					if (Util.colide(tiroChefe, tanque)) {
+
 						vidas--;
 						tiroChefe.setAtivo(false);
 
@@ -391,6 +406,7 @@ public class Jogo extends JFrame {
 
 						if (Util.colide(tiros[i], tanque)) {
 							vidas--;
+							player.play("sons/explosion.wav");
 							tiros[i].setAtivo(false);
 
 						} else if (Util.colide(tiros[i], barreira)) {
@@ -493,8 +509,9 @@ public class Jogo extends JFrame {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 		Jogo jogo = new Jogo();
+
 		//Jogador jogador = new Jogador();
 		Scoreboard score = new Scoreboard();
 		jogo.carregarJogo();
