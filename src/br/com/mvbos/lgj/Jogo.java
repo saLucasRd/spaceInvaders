@@ -106,7 +106,7 @@ public class Jogo extends JFrame {
 
 	// Elementos do jogo
 
-	private int vidas = 1;
+	private int vidas = 3;
 
 	// Desenharemos mais dois tanques na base da tela
 	private Elemento vida = new Tanque();
